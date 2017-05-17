@@ -42,17 +42,18 @@ class AcceptLanguage {
         this.defaultLanguageTag = definedLanguages[0];
     }
 
-    public get(languagePriorityList: string | null | undefined): string | null {
-        return this.parse(languagePriorityList)[0];
+    public get(languagePriorityList: string | null | undefined, returnDefault: boolean = true): string | null {
+        return this.parse(languagePriorityList, returnDefault)[0];
     }
 
     public create(): this {
         return null as any;
     }
 
-    private parse(languagePriorityList: string | null | undefined): (string | null)[] {
+    private parse(languagePriorityList: string | null | undefined, returnDefault: boolean = true): (string | null)[] {
+        const defaultTag = returnDefault ? [this.defaultLanguageTag] : [];
         if (!languagePriorityList) {
-            return [this.defaultLanguageTag];
+            return defaultTag;
         }
 
         const parsedAndSortedLanguageTags = parseAndSortLanguageTags(languagePriorityList);
@@ -121,7 +122,7 @@ class AcceptLanguage {
             }
         }
 
-        return result.length > 0 ? result : [this.defaultLanguageTag];
+        return result.length > 0 ? result : defaultTag;
 
         function scoreLanguageSimilarity(languageA: any, languageB: any) {
             let score = 0;

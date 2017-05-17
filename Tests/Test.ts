@@ -126,4 +126,11 @@ describe('Language definitions', () => {
         expect(al.get(null)).to.equal(DEFAULT_LANGUAGE);
         expect(al.get('')).to.equal(DEFAULT_LANGUAGE);
     });
+
+    it('disables returning default language', () => {
+        const al = createInstanceWithDefault(['sv-SE', 'zh-Hant-CN-x-red']);
+        expect(al.get(undefined, false)).to.be.undefined;
+        expect(al.get(null, false)).to.be.undefined;
+        expect(al.get('', false)).to.be.undefined;
+    });
 });

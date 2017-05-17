@@ -34,15 +34,18 @@ var AcceptLanguage = (function () {
         });
         this.defaultLanguageTag = definedLanguages[0];
     };
-    AcceptLanguage.prototype.get = function (languagePriorityList) {
-        return this.parse(languagePriorityList)[0];
+    AcceptLanguage.prototype.get = function (languagePriorityList, returnDefault) {
+        if (returnDefault === void 0) { returnDefault = true; }
+        return this.parse(languagePriorityList, returnDefault)[0];
     };
     AcceptLanguage.prototype.create = function () {
         return null;
     };
-    AcceptLanguage.prototype.parse = function (languagePriorityList) {
+    AcceptLanguage.prototype.parse = function (languagePriorityList, returnDefault) {
+        if (returnDefault === void 0) { returnDefault = true; }
+        var defaultTag = returnDefault ? [this.defaultLanguageTag] : [];
         if (!languagePriorityList) {
-            return [this.defaultLanguageTag];
+            return defaultTag;
         }
         var parsedAndSortedLanguageTags = parseAndSortLanguageTags(languagePriorityList);
         var result = [];
@@ -100,7 +103,7 @@ var AcceptLanguage = (function () {
                 result.push(closestMatch);
             }
         }
-        return result.length > 0 ? result : [this.defaultLanguageTag];
+        return result.length > 0 ? result : defaultTag;
         function scoreLanguageSimilarity(languageA, languageB) {
             var score = 0;
             if (languageA.script === languageB.script)
